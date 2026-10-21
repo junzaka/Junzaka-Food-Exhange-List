@@ -124,52 +124,156 @@ st.markdown(
     f"### {selected_food['food_name']}"
 )
 
-info1, info2, info3 = st.columns(3)
+st.markdown("## 🍽️ Food Information")
 
-info1.metric(
-    "Serving Size",
-    selected_food["serving_size"]
+st.markdown(
+    f"### {selected_food['food_name']}"
 )
 
 weight_value = (
     "-"
-    if pd.isna(
-        selected_food["weight_g"]
-    )
+    if pd.isna(selected_food["weight_g"])
     else f"{selected_food['weight_g']} g"
 )
 
-info2.metric(
-    "Weight",
-    weight_value
+st.markdown(
+    f"""
+    <style>
+    .food-box {{
+        border: 2px dashed #666666;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 5px;
+    }}
+
+    .green-bg {{
+        background-color: #e8f5e9;
+    }}
+
+    .yellow-bg {{
+        background-color: #fff9c4;
+    }}
+
+    .food-label {{
+        font-size:14px;
+        color:#555555;
+    }}
+
+    .food-value {{
+        font-size:28px;
+        font-weight:bold;
+        color:#1f2c4f;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
 )
 
-info3.metric(
-    "Exchange",
-    selected_food["exchange"]
-)
+# แถวบน
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+
+    st.markdown(
+        f"""
+        <div class="food-box green-bg">
+        <div class="food-label">Serving Size</div>
+        <div class="food-value">
+        {selected_food['serving_size']}
+        </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col2:
+
+    st.markdown(
+        f"""
+        <div class="food-box green-bg">
+        <div class="food-label">Weight</div>
+        <div class="food-value">
+        {weight_value}
+        </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col3:
+
+    st.markdown(
+        f"""
+        <div class="food-box green-bg">
+        <div class="food-label">Exchange</div>
+        <div class="food-value">
+        {selected_food['exchange']}
+        </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+# แถวล่าง
 
 c1, c2, c3, c4 = st.columns(4)
 
-c1.metric(
-    "CHO",
-    f"{selected_food['carb']} g"
-)
+with c1:
 
-c2.metric(
-    "Protein",
-    f"{selected_food['protein']} g"
-)
+    st.markdown(
+        f"""
+        <div class="food-box yellow-bg">
+        <div class="food-label">CHO</div>
+        <div class="food-value">
+        {selected_food['carb']} g
+        </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
-c3.metric(
-    "Fat",
-    f"{selected_food['fat']} g"
-)
+with c2:
 
-c4.metric(
-    "Kcal",
-    f"{selected_food['kcal']} kcal"
-)
+    st.markdown(
+        f"""
+        <div class="food-box yellow-bg">
+        <div class="food-label">Protein</div>
+        <div class="food-value">
+        {selected_food['protein']} g
+        </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with c3:
+
+    st.markdown(
+        f"""
+        <div class="food-box yellow-bg">
+        <div class="food-label">Fat</div>
+        <div class="food-value">
+        {selected_food['fat']} g
+        </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with c4:
+
+    st.markdown(
+        f"""
+        <div class="food-box yellow-bg">
+        <div class="food-label">Kcal</div>
+        <div class="food-value">
+        {selected_food['kcal']} kcal
+        </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 # ==================================
 # ADD FOOD
 # ==================================
