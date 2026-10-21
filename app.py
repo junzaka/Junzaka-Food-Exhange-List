@@ -124,12 +124,6 @@ st.markdown(
     f"### {selected_food['food_name']}"
 )
 
-st.markdown("## 🍽️ Food Information")
-
-st.markdown(
-    f"### {selected_food['food_name']}"
-)
-
 weight_value = (
     "-"
     if pd.isna(selected_food["weight_g"])
