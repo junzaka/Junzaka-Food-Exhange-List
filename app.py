@@ -74,22 +74,6 @@ st.caption(
     f"พบ {len(filtered_foods)} รายการ"
 )
 
-search_food = st.text_input(
-    "🔍 ค้นหาอาหาร"
-)
-
-if search_food:
-
-    filtered_foods = filtered_foods[
-        filtered_foods["food_name"]
-        .astype(str)
-        .str.contains(
-            search_food,
-            case=False,
-            na=False
-        )
-    ]
-
 food_name = st.selectbox(
     "เลือกอาหาร",
     filtered_foods["food_name"]
@@ -189,7 +173,8 @@ if len(st.session_state.food_records) > 0:
         st.session_state.food_records
     )
 
-    st.subheader("Food Records")
+    st.divider()
+st.markdown("## 📝 Food Records")
 
     st.dataframe(
         df,
@@ -205,7 +190,8 @@ if len(st.session_state.food_records) > 0:
     fat = df["Fat"].sum()
     kcal = df["Energy"].sum()
 
-    st.markdown("### 📊 Nutrition Summary")
+    st.divider()
+st.markdown("## 📊 Nutrition Summary")
 
     c1, c2, c3, c4 = st.columns(4)
 
@@ -233,7 +219,8 @@ if len(st.session_state.food_records) > 0:
     # EXCHANGE SUMMARY
     # ==========================
 
-    st.markdown("### 🔄 Exchange Summary")
+    st.divider()
+st.markdown("## 🔄 Exchange Summary")
 
     exchange_summary = (
         df.groupby("Group")["Exchange"]
@@ -250,7 +237,8 @@ if len(st.session_state.food_records) > 0:
     # MEAL SUMMARY
     # ==========================
 
-    st.markdown("### 🍱 Meal Summary")
+    st.divider()
+st.markdown("## 🍱 Meal Summary")
 
     meal_summary = (
         df.groupby("Meal")["Energy"]
