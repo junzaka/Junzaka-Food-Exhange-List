@@ -3,27 +3,27 @@ import pandas as pd
 import plotly.express as px
 
 st.set_page_config(
-    page_title="Thai Food Exchange Calculator",
+    page_title="Thai Food Exchange Planner",
     page_icon="🥗",
     layout="wide"
 )
 
-# ==========================
+# ==================================
 # LOAD DATABASE
-# ==========================
+# ==================================
 
 food_df = pd.read_csv("foods.csv")
 
-# ==========================
+# ==================================
 # SESSION STATE
-# ==========================
+# ==================================
 
 if "food_records" not in st.session_state:
     st.session_state.food_records = []
 
-# ==========================
+# ==================================
 # HEADER
-# ==========================
+# ==================================
 
 st.markdown("""
 <h1 style='margin-bottom:0px;'>
@@ -33,21 +33,26 @@ st.markdown("""
 <p style='font-size:11px;color:#888888;margin-top:-10px;'>
 by Junzaka
 </p>
-""",
-unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-# ==========================
-# FOOD SELECTION
-# ==========================
+st.divider()
 
-group_list = sorted(
-    food_df["group"].dropna().unique()
-)
+# ==================================
+# FOOD FILTER
+# ==================================
 
-group = st.selectbox(
-    "หมวดอาหาร",
-    group_list
-)
+col1, col2 = st.columns(2)
+
+with col1:
+
+    group = st.selectbox(
+        "หมวดอาหาร",
+        sorted(
+            food_df["group"]
+            .dropna()
+            .unique()
+        )
+    )
 
 filtered_foods = food_df[
     food_df["group"] == group
@@ -59,19 +64,22 @@ subcategory_list = sorted(
     .unique()
 )
 
-subcategory = st.selectbox(
-    "หมวดย่อย",
-    subcategory_list
-)
+with col2:
+
+    subcategory = st.selectbox(
+        "หมวดย่อย",
+        subcategory_list
+    )
 
 if subcategory != "":
+
     filtered_foods = filtered_foods[
         filtered_foods["subcategory"]
         == subcategory
     ]
 
 st.caption(
-    f"พบ {len(filtered_foods)} รายการ"
+    f"พบอาหาร {len(filtered_foods)} รายการ"
 )
 
 food_name = st.selectbox(
@@ -83,21 +91,24 @@ selected_food = filtered_foods[
     filtered_foods["food_name"]
     == food_name
 ].iloc[0]
-# ==========================
-# FOOD DETAIL
-# ==========================
 
-st.markdown("### 🍽️ Food Information")
+# ==================================
+# FOOD INFORMATION
+# ==================================
+
+st.divider()
+
+st.markdown("## 🍽️ Food Information")
 
 st.markdown(
 f"""
-**🍴 {selected_food['food_name']}**
+### {selected_food['food_name']}
 
-• Serving Size : {selected_food['serving_size']}
+**Serving Size:** {selected_food['serving_size']}
 
-• Weight : {selected_food['weight_g']} g
+**Weight:** {selected_food['weight_g']} g
 
-• Exchange : {selected_food['exchange']}
+**Exchange:** {selected_food['exchange']}
 """
 )
 
@@ -123,9 +134,11 @@ c4.metric(
     selected_food["kcal"]
 )
 
-# ==========================
-# MEAL TYPE
-# ==========================
+# ==================================
+# ADD FOOD
+# ==================================
+
+st.divider()
 
 meal = st.selectbox(
     "Meal",
@@ -144,10 +157,6 @@ exchange = st.number_input(
     value=1.0
 )
 
-# ==========================
-# ADD FOOD
-# ==========================
-
 if st.button("➕ Add Food"):
 
     st.session_state.food_records.append(
@@ -163,26 +172,52 @@ if st.button("➕ Add Food"):
         }
     )
 
-# ==========================
-# FOOD RECORD TABLE
-# ==========================
+# ==================================
+# FOOD RECORDS
+# ==================================
 
 if len(st.session_state.food_records) > 0:
+
+    st.divider()
+
+    st.markdown("## 📝 Food Records")
+
+    delete_index = None
+
+    for idx, item in enumerate(
+        st.session_state.food_records
+    ):
+
+        col1, col2 = st.columns([8,1])
+
+        with col1:
+
+            st.write(
+                f"{item['Meal']} | {item['Food']} | {item['Exchange']} Exchange"
+            )
+
+        with col2:
+
+            if st.button(
+                "❌",
+                key=f"delete_{idx}"
+            ):
+                delete_index = idx
+
+    if delete_index is not None:
+
+        st.session_state.food_records.pop(
+            delete_index
+        )
+
+        st.rerun()
 
     df = pd.DataFrame(
         st.session_state.food_records
     )
 
-    st.divider()
-st.markdown("## 📝 Food Records")
-
-    st.dataframe(
-        df,
-        use_container_width=True
-    )
-
     # ==========================
-    # SUMMARY
+    # NUTRITION SUMMARY
     # ==========================
 
     cho = df["CHO"].sum()
@@ -191,7 +226,10 @@ st.markdown("## 📝 Food Records")
     kcal = df["Energy"].sum()
 
     st.divider()
-st.markdown("## 📊 Nutrition Summary")
+
+    st.markdown(
+        "## 📊 Nutrition Summary"
+    )
 
     c1, c2, c3, c4 = st.columns(4)
 
@@ -211,16 +249,19 @@ st.markdown("## 📊 Nutrition Summary")
     )
 
     c4.metric(
-        "Energy (kcal)",
+        "Kcal",
         round(kcal,0)
     )
 
     # ==========================
-    # EXCHANGE SUMMARY
+    # FOOD EXCHANGE SUMMARY
     # ==========================
 
     st.divider()
-st.markdown("## 🔄 Exchange Summary")
+
+    st.markdown(
+        "## 🔄 Food Exchange Summary"
+    )
 
     exchange_summary = (
         df.groupby("Group")["Exchange"]
@@ -228,17 +269,26 @@ st.markdown("## 🔄 Exchange Summary")
         .reset_index()
     )
 
-    st.dataframe(
-        exchange_summary,
-        use_container_width=True
+    cols = st.columns(
+        len(exchange_summary)
     )
+
+    for i, row in exchange_summary.iterrows():
+
+        cols[i].metric(
+            row["Group"],
+            round(row["Exchange"],1)
+        )
 
     # ==========================
     # MEAL SUMMARY
     # ==========================
 
     st.divider()
-st.markdown("## 🍱 Meal Summary")
+
+    st.markdown(
+        "## 🍱 Meal Summary"
+    )
 
     meal_summary = (
         df.groupby("Meal")["Energy"]
@@ -246,23 +296,31 @@ st.markdown("## 🍱 Meal Summary")
         .reset_index()
     )
 
-    st.dataframe(
-        meal_summary,
-        use_container_width=True
+    cols = st.columns(
+        len(meal_summary)
     )
+
+    for i, row in meal_summary.iterrows():
+
+        cols[i].metric(
+            row["Meal"],
+            f"{round(row['Energy'],0)} kcal"
+        )
 
     # ==========================
     # PIE CHART
     # ==========================
 
+    st.divider()
+
     pie_df = pd.DataFrame(
         {
-            "Nutrient":[
+            "Nutrient": [
                 "CHO",
                 "Protein",
                 "Fat"
             ],
-            "Gram":[
+            "Gram": [
                 cho,
                 protein,
                 fat
@@ -279,14 +337,18 @@ st.markdown("## 🍱 Meal Summary")
 
     st.plotly_chart(
         fig,
-        use_container_width=True
+        width="stretch"
     )
 
-# ==========================
+# ==================================
 # CLEAR
-# ==========================
+# ==================================
 
-if st.button("Clear All"):
+st.divider()
+
+if st.button(
+    "🗑️ Clear All"
+):
 
     st.session_state.food_records = []
 
