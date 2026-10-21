@@ -35,7 +35,6 @@ by Junzaka
 </p>
 """, unsafe_allow_html=True)
 
-st.divider()
 # ==================================
 # ADD FOOD
 # ==================================
