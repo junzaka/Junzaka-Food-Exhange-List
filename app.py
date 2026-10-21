@@ -25,15 +25,22 @@ if "food_records" not in st.session_state:
 # HEADER
 # ==========================
 
-st.title("🥗 Thai Food Exchange Planner")
+st.markdown("""
+# 🥗 Thai Food Exchange Planner
 
-st.markdown("Thai Food Exchange Lists Calculator")
+<div style='font-size:14px;color:gray;'>
+by Junzaka
+</div>
+""",
+unsafe_allow_html=True)
 
 # ==========================
 # FOOD SELECTION
 # ==========================
 
-group_list = sorted(food_df["group"].dropna().unique())
+group_list = sorted(
+    food_df["group"].dropna().unique()
+)
 
 group = st.selectbox(
     "หมวดอาหาร",
@@ -43,6 +50,26 @@ group = st.selectbox(
 filtered_foods = food_df[
     food_df["group"] == group
 ]
+
+st.caption(
+    f"พบ {len(filtered_foods)} รายการ"
+)
+
+search_food = st.text_input(
+    "🔍 ค้นหาอาหาร"
+)
+
+if search_food:
+
+    filtered_foods = filtered_foods[
+        filtered_foods["food_name"]
+        .astype(str)
+        .str.contains(
+            search_food,
+            case=False,
+            na=False
+        )
+    ]
 
 food_name = st.selectbox(
     "เลือกอาหาร",
@@ -57,23 +84,18 @@ selected_food = filtered_foods[
 # FOOD DETAIL
 # ==========================
 
-st.subheader("Food Information")
+st.markdown("### 🍽️ Food Information")
 
-c1, c2, c3 = st.columns(3)
+st.info(
+    f"""
+Food : {selected_food['food_name']}
 
-c1.metric(
-    "Serving Size",
-    selected_food["serving_size"]
-)
+Serving Size : {selected_food['serving_size']}
 
-c2.metric(
-    "Weight (g)",
-    selected_food["weight_g"]
-)
+Weight : {selected_food['weight_g']} g
 
-c3.metric(
-    "Exchange",
-    selected_food["exchange"]
+Exchange : {selected_food['exchange']}
+"""
 )
 
 c1, c2, c3, c4 = st.columns(4)
@@ -164,7 +186,7 @@ if len(st.session_state.food_records) > 0:
     fat = df["Fat"].sum()
     kcal = df["Energy"].sum()
 
-    st.subheader("Nutrition Summary")
+    st.markdown("### 📊 Nutrition Summary")
 
     c1, c2, c3, c4 = st.columns(4)
 
@@ -192,7 +214,7 @@ if len(st.session_state.food_records) > 0:
     # EXCHANGE SUMMARY
     # ==========================
 
-    st.subheader("Exchange Summary")
+    st.markdown("### 🔄 Exchange Summary")
 
     exchange_summary = (
         df.groupby("Group")["Exchange"]
@@ -209,7 +231,7 @@ if len(st.session_state.food_records) > 0:
     # MEAL SUMMARY
     # ==========================
 
-    st.subheader("Meal Summary")
+    st.markdown("### 🍱 Meal Summary")
 
     meal_summary = (
         df.groupby("Meal")["Energy"]
