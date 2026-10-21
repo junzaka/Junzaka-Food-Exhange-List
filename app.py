@@ -36,7 +36,36 @@ by Junzaka
 """, unsafe_allow_html=True)
 
 st.divider()
+# ==================================
+# ADD FOOD
+# ==================================
 
+st.markdown("## ➕ Add Food")
+
+col1, col2 = st.columns(2)
+
+with col1:
+
+    meal = st.selectbox(
+        "Meal",
+        [
+            "Breakfast",
+            "Lunch",
+            "Dinner",
+            "Snack"
+        ]
+    )
+
+with col2:
+
+    exchange = st.number_input(
+        "Exchange",
+        min_value=0.5,
+        step=0.5,
+        value=1.0
+    )
+
+st.divider()
 # ==================================
 # FOOD FILTER
 # ==================================
@@ -268,28 +297,6 @@ with c4:
         """,
         unsafe_allow_html=True
     )
-# ==================================
-# ADD FOOD
-# ==================================
-
-st.divider()
-
-meal = st.selectbox(
-    "Meal",
-    [
-        "Breakfast",
-        "Lunch",
-        "Dinner",
-        "Snack"
-    ]
-)
-
-exchange = st.number_input(
-    "Exchange",
-    min_value=0.5,
-    step=0.5,
-    value=1.0
-)
 
 if st.button("➕ Add Food"):
 
