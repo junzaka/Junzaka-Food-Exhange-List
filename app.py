@@ -26,11 +26,13 @@ if "food_records" not in st.session_state:
 # ==========================
 
 st.markdown("""
-# 🥗 Thai Food Exchange Planner
+<h1 style='margin-bottom:0px;'>
+🥗 Thai Food Exchange Planner
+</h1>
 
-<div style='font-size:14px;color:gray;'>
+<p style='font-size:11px;color:#888888;margin-top:-10px;'>
 by Junzaka
-</div>
+</p>
 """,
 unsafe_allow_html=True)
 
@@ -50,6 +52,23 @@ group = st.selectbox(
 filtered_foods = food_df[
     food_df["group"] == group
 ]
+
+subcategory_list = sorted(
+    filtered_foods["subcategory"]
+    .fillna("")
+    .unique()
+)
+
+subcategory = st.selectbox(
+    "หมวดย่อย",
+    subcategory_list
+)
+
+if subcategory != "":
+    filtered_foods = filtered_foods[
+        filtered_foods["subcategory"]
+        == subcategory
+    ]
 
 st.caption(
     f"พบ {len(filtered_foods)} รายการ"
@@ -77,24 +96,24 @@ food_name = st.selectbox(
 )
 
 selected_food = filtered_foods[
-    filtered_foods["food_name"] == food_name
+    filtered_foods["food_name"]
+    == food_name
 ].iloc[0]
-
 # ==========================
 # FOOD DETAIL
 # ==========================
 
 st.markdown("### 🍽️ Food Information")
 
-st.info(
-    f"""
-Food : {selected_food['food_name']}
+st.markdown(
+f"""
+**🍴 {selected_food['food_name']}**
 
-Serving Size : {selected_food['serving_size']}
+• Serving Size : {selected_food['serving_size']}
 
-Weight : {selected_food['weight_g']} g
+• Weight : {selected_food['weight_g']} g
 
-Exchange : {selected_food['exchange']}
+• Exchange : {selected_food['exchange']}
 """
 )
 
