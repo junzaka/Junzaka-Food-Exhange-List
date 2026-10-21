@@ -12,8 +12,8 @@ st.set_page_config(
 
 st.title("🥗 Thai Food Exchange Calculator")
 
-if "items" not in st.session_state:
-    st.session_state.items = []
+if "food_records" not in st.session_state:
+    st.session_state.food_records = []
 
 group = st.selectbox(
     "หมวดอาหาร",
@@ -36,7 +36,7 @@ if st.button("➕ เพิ่มอาหาร"):
 
     nutrient = foods[group][food]
 
-    st.session_state.items.append({
+    st.session_state.food_records.append({
         "หมวด": group,
         "อาหาร": food,
         "Exchange": exchange,
@@ -46,9 +46,9 @@ if st.button("➕ เพิ่มอาหาร"):
         "KCAL": nutrient["kcal"] * exchange
     })
 
-if len(st.session_state.items) > 0:
+if len(st.session_state.food_records) > 0:
 
-    df = pd.DataFrame(st.session_state.items)
+    df = pd.DataFrame(st.session_state.food_records)
 
     st.subheader("รายการอาหาร")
 
@@ -111,5 +111,5 @@ if len(st.session_state.items) > 0:
     )
 
 if st.button("Clear All"):
-    st.session_state.items = []
+    st.session_state.food_records = []
     st.rerun()
