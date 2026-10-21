@@ -42,7 +42,7 @@ st.divider()
 
 st.markdown("## ➕ Add Food")
 
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns([3,3,2])
 
 with col1:
 
@@ -63,6 +63,15 @@ with col2:
         min_value=0.5,
         step=0.5,
         value=1.0
+    )
+
+with col3:
+
+    st.write("")
+
+    add_food_top = st.button(
+        "➕ Add Food",
+        use_container_width=True
     )
 
 st.divider()
@@ -298,7 +307,7 @@ with c4:
         unsafe_allow_html=True
     )
 
-if st.button("➕ Add Food"):
+if add_food_top:
 
     st.session_state.food_records.append(
         {
