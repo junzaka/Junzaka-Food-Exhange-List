@@ -58,11 +58,31 @@ filtered_foods = food_df[
     food_df["group"] == group
 ]
 
-subcategory_list = sorted(
+filtered_foods["subcategory"] = (
     filtered_foods["subcategory"]
-    .fillna("")
-    .unique()
+    .fillna("N/A")
 )
+
+if group == "เนื้อสัตว์":
+
+    subcategory_list = [
+        "ไขมันต่ำมาก",
+        "ไขมันต่ำ",
+        "ไขมันปานกลาง",
+        "ไขมันสูง"
+    ]
+
+    subcategory_list = [
+        x for x in subcategory_list
+        if x in filtered_foods["subcategory"].unique()
+    ]
+
+else:
+
+    subcategory_list = sorted(
+        filtered_foods["subcategory"]
+        .unique()
+    )
 
 with col2:
 
@@ -101,39 +121,55 @@ st.divider()
 st.markdown("## 🍽️ Food Information")
 
 st.markdown(
-f"""
-### {selected_food['food_name']}
+    f"### {selected_food['food_name']}"
+)
 
-**Serving Size:** {selected_food['serving_size']}
+info1, info2, info3 = st.columns(3)
 
-**Weight:** {selected_food['weight_g']} g
+info1.metric(
+    "Serving Size",
+    selected_food["serving_size"]
+)
 
-**Exchange:** {selected_food['exchange']}
-"""
+weight_value = (
+    "-"
+    if pd.isna(
+        selected_food["weight_g"]
+    )
+    else f"{selected_food['weight_g']} g"
+)
+
+info2.metric(
+    "Weight",
+    weight_value
+)
+
+info3.metric(
+    "Exchange",
+    selected_food["exchange"]
 )
 
 c1, c2, c3, c4 = st.columns(4)
 
 c1.metric(
     "CHO",
-    selected_food["carb"]
+    f"{selected_food['carb']} g"
 )
 
 c2.metric(
     "Protein",
-    selected_food["protein"]
+    f"{selected_food['protein']} g"
 )
 
 c3.metric(
     "Fat",
-    selected_food["fat"]
+    f"{selected_food['fat']} g"
 )
 
 c4.metric(
     "Kcal",
-    selected_food["kcal"]
+    f"{selected_food['kcal']} kcal"
 )
-
 # ==================================
 # ADD FOOD
 # ==================================
