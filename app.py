@@ -171,10 +171,10 @@ st.markdown(
     f"""
     <style>
     .food-box {{
-        border: 2px dashed #666666;
-        border-radius: 10px;
-        padding: 15px;
-        margin-bottom: 5px;
+        border: 1px dashed #78909c;
+        border-radius: 8px;
+        padding: 6px;
+        margin-bottom: 2px;
     }}
 
     .green-bg {{
@@ -186,12 +186,12 @@ st.markdown(
     }}
 
     .food-label {{
-        font-size:14px;
+        font-size:11px;
         color:#555555;
     }}
 
     .food-value {{
-        font-size:28px;
+        font-size:16px;
         font-weight:bold;
         color:#1f2c4f;
     }}
