@@ -382,57 +382,25 @@ if len(st.session_state.food_records) > 0:
 
     c1, c2, c3, c4 = st.columns(4)
 
-    with c1:
-    st.markdown(
-        f"""
-        <div class="food-box yellow-bg">
-        <div class="food-label">CHO</div>
-        <div class="food-value">
-        {round(cho,1)} g
-        </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+c1.metric(
+    "CHO (g)",
+    round(cho,1)
+)
 
-    with c2:
-    st.markdown(
-        f"""
-        <div class="food-box yellow-bg">
-        <div class="food-label">Protein</div>
-        <div class="food-value">
-        {round(protein,1)} g
-        </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+c2.metric(
+    "Protein (g)",
+    round(protein,1)
+)
 
-    with c3:
-    st.markdown(
-        f"""
-        <div class="food-box yellow-bg">
-        <div class="food-label">Fat</div>
-        <div class="food-value">
-        {round(fat,1)} g
-        </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+c3.metric(
+    "Fat (g)",
+    round(fat,1)
+)
 
-    with c4:
-    st.markdown(
-        f"""
-        <div class="food-box yellow-bg">
-        <div class="food-label">Kcal</div>
-        <div class="food-value">
-        {round(kcal,0)} kcal
-        </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+c4.metric(
+    "Kcal",
+    round(kcal,0)
+)
 
     # ==========================
     # FOOD EXCHANGE SUMMARY
