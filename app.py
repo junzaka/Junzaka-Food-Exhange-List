@@ -456,10 +456,17 @@ with c4:
 
     for i, row in exchange_summary.iterrows():
 
-        cols[i].metric(
-            row["Group"],
-            round(row["Exchange"],1)
-        )
+        cols[i].markdown(
+    f"""
+    <div class="food-box yellow-bg">
+    <div class="food-label">{row['Group']}</div>
+    <div class="food-value">
+    {round(row['Exchange'],1)}
+    </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
     # ==========================
     # MEAL SUMMARY
@@ -483,10 +490,17 @@ with c4:
 
     for i, row in meal_summary.iterrows():
 
-        cols[i].metric(
-            row["Meal"],
-            f"{round(row['Energy'],0)} kcal"
-        )
+        cols[i].markdown(
+    f"""
+    <div class="food-box yellow-bg">
+    <div class="food-label">{row['Meal']}</div>
+    <div class="food-value">
+    {round(row['Energy'],0)} kcal
+    </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
     # ==========================
     # PIE CHART
