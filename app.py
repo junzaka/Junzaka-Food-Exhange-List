@@ -380,9 +380,9 @@ if len(st.session_state.food_records) > 0:
         "## 📊 Nutrition Summary"
     )
 
-c1, c2, c3, c4 = st.columns(4)
+    c1, c2, c3, c4 = st.columns(4)
 
-with c1:
+    with c1:
     st.markdown(
         f"""
         <div class="food-box yellow-bg">
@@ -395,7 +395,7 @@ with c1:
         unsafe_allow_html=True
     )
 
-with c2:
+    with c2:
     st.markdown(
         f"""
         <div class="food-box yellow-bg">
@@ -408,7 +408,7 @@ with c2:
         unsafe_allow_html=True
     )
 
-with c3:
+    with c3:
     st.markdown(
         f"""
         <div class="food-box yellow-bg">
@@ -421,7 +421,7 @@ with c3:
         unsafe_allow_html=True
     )
 
-with c4:
+    with c4:
     st.markdown(
         f"""
         <div class="food-box yellow-bg">
